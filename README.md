@@ -36,42 +36,52 @@ IPAddress ip(192, 168, 0, 1);
 const uint16_t kPort = 49152;
 ---
 
-## Build & Upload
+Build & Upload
 
-1. Open `DipCoater.ino` in the **Arduino IDE**.  
-2. Install the **Ethernet** library if it is not already installed.  
-3. Adjust **MAC**, **IP**, and **Port** in the code header if needed.  
-4. Click **Verify → Upload**, then open the **Serial Monitor** to confirm that the TCP server starts successfully.
+Open DipCoater.ino in the Arduino IDE.
 
----
+Install the Ethernet library if missing.
 
-## TCP Command Protocol
+Adjust MAC/IP/Port as needed.
 
-| Command | Description |
-|----------|--------------|
-| `HomeX`, `HomeY` | Return to limit and back off safely |
-| `Move,<dir>,<dist_mm>,<speed_mm_s>` | Move in direction {0:left, 1:up, 2:right, 3:down} |
-| `Submit,<12 params>` | Send dip parameters (speeds, positions, times) |
-| `Dip` | Execute a full dipping sequence |
-| `Stop` | Safely stop any ongoing motion |
+Verify → Upload. Open Serial Monitor to confirm the TCP server started.
 
----
+TCP Command Protocol
 
-## LabVIEW Interface
+Directions: 0=left, 1=up, 2=right, 3=down
 
-Screenshots of the LabVIEW control panel:
+Command	Description
+HomeX	Home the X/Horizontal axis and back off safely.
+HomeY	Home the Y/Vertical axis and back off safely.
+Move,<dir>,<dist_mm>,<speed_mm_s>	Move in direction <dir> by <dist_mm> at <speed_mm_s>.
+Submit,<12 params>	Submit the current recipe parameters (see below).
+Dip	Execute the full dip sequence using the last submitted parameters.
+Stop	Safely stop motion/tones; if mid-dip, exit at the next safe point.
 
-![LV Connect](labview/screenshots/lv-connect.png)  
-![LV Command](labview/screenshots/lv-send-cmd.png)  
-![LV UI](labview/screenshots/lv-ui.png)
+Submit parameters (12 total, order matters):
 
----
+moveSpeed (mm/s)
 
-## Safety
+dipSpeed (mm/s)
 
-- Limit switches are debounced and automatically retracted after triggering.  
-- `Stop` halts all outputs and completes the current safe segment before stopping.  
-- Always verify wiring, motor current limits, and safety connections before powering on.
+withdrawSpeed (mm/s)
 
----
+dipX (mm) – target X for dipping
 
+dipY1 (mm) – upper Y reference
+
+dipY2 (mm) – lower Y (dip depth)
+
+curX (mm) – current X (for resume)
+
+curY (mm) – current Y (for resume)
+
+dipTimes (count) – number of cycles
+
+curingTime_ms (ms) – curing/hold time
+
+dippingTime_ms (ms) – dip dwell time
+
+liftHeight_mm (mm) – lift height after dip
+
+Dip process (placeholder)

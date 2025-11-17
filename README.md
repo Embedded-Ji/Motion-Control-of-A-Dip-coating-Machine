@@ -30,8 +30,3 @@ The firmware is implemented in `DipCoater.ino`.
 
 ## Network Configuration
 Edit the header of `DipCoater.ino`:
-```cpp
-byte mac[] = { 0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED };
-IPAddress ip(192, 168, 0, 1);
-const uint16_t kPort = 49152;
----
